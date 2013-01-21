@@ -1,7 +1,7 @@
 
 // minifier: path aliases
 
-enyo.path.addPaths({layout: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/layout/", onyx: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/onyx/", onyx: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/onyx/source/", canvas: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/canvas/", Shape2D: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/Shape2D/", Shape2D: "C://development/code/webOSProjects/CrossPlatform/TopWatch/enyo/../lib/Shape2D/source/"});
+enyo.path.addPaths({layout: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/layout/", onyx: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/onyx/", onyx: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/onyx/source/", canvas: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/canvas/", Shape2D: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/Shape2D/", Shape2D: "C://development/code/webOSProjects/CrossPlatform/TopWatch_Build/enyo/../lib/Shape2D/source/"});
 
 // FittableLayout.js
 
@@ -3856,7 +3856,7 @@ item: "item1",
 components: [ {
 name: "item1",
 classes: "panels-sample-sliding-item",
-style: "margin-left:20px;"
+style: "margin-left:20px;font-size:36px;"
 } ]
 } ]
 } ]
@@ -4054,7 +4054,7 @@ enyo.kind({
 name: "TopWatchDial",
 kind: "Control",
 components: [ {
-kind: "Canvas",
+kind: "enyo.Canvas",
 attributes: {
 width: 280,
 height: 300
@@ -4067,20 +4067,22 @@ name: "timerLayer",
 kind: "canvas.Control"
 }, {
 name: "timerText",
-kind: "canvas.Text",
+kind: "enyo.canvas.Text",
 bounds: {
 l: 0,
-t: 15
+t: 0
 },
-color: "black"
+color: "black",
+font: "36pt Arial"
 }, {
 name: "splitText",
-kind: "canvas.Text",
+kind: "enyo.canvas.Text",
 bounds: {
 l: 0,
-t: 15
+t: 0
 },
-color: "black"
+color: "black",
+font: "36pt Arial"
 } ]
 } ],
 published: {
@@ -4126,13 +4128,13 @@ destroy: function() {
 this.cancel && enyo.cancelRequestAnimationFrame(this.cancel), this.inherited(arguments);
 },
 drawDial: function(e, t, n, r, i, s) {
-var o = dialRef.g_width / 2, u = (dialRef.g_height - heightMargin) / 2, a = o, f = u;
+var o = dialRef.g_width / 2, u = -20 + (dialRef.g_height - heightMargin) / 2, a = o, f = u;
 dialRef.$.timerText.setBounds({
-l: a - 70,
-t: dialRef.g_height - (heightMargin + 25)
+l: a - 240,
+t: dialRef.g_height - (heightMargin + 15)
 }), dialRef.$.timerText.setText("Elapsed: 00:00:00:000"), dialRef.$.splitText.setBounds({
-l: a - 45,
-t: dialRef.g_height - heightMargin
+l: a - 160,
+t: dialRef.g_height - (heightMargin - 25)
 }), dialRef.$.splitText.setText("Split: 00:00:00:000"), dialLabel = "Draw Dial :" + o + ", " + u + ", " + s;
 var l = s / 5;
 dialRef.drawIndicator(o, u, s, l, e, 101, 2, 16), s -= l + 5, dialRef.drawIndicator(o, u, s, l, t, 12, 4, 3), s -= l + 5, dialRef.drawIndicator(o, u, s, l, n, 12, 6, 2), s -= l + 5, dialRef.drawIndicator(o, u, s, l, r, 12, 8, 1), s -= l + 5, dialRef.$.watchFace.createComponent({
@@ -4199,7 +4201,7 @@ this.start = Date.now(), this.cancel = enyo.requestAnimationFrame(enyo.bind(this
 return;
 }
 dialRef.g_timeStr = dialRef.timeString(), dialRef.displayTime(), dialRef.firstTime = !1, this.frame++;
-var e = dialRef.g_width / 2, t = (dialRef.g_height - heightMargin) / 2, n = dialRef.g_width;
+var e = dialRef.g_width / 2, t = -20 + (dialRef.g_height - heightMargin) / 2, n = dialRef.g_width;
 dialRef.g_height < n && (n = dialRef.g_height - heightMargin), n = .4 * n;
 var r = n / 5, i = 0, s = !1;
 s || (this.$.timerLayer.destroyClientControls(), i = 360 * dialRef.milliSec / 1e3 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.milliColor, i, "milli"), n -= r + 5, i = 360 * dialRef.second / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.secColor, i, "second"), n -= r + 5, i = 360 * dialRef.minute / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.minColor, i, "minute"), n -= r + 5, i = 360 * dialRef.hour / 12 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.hourColor, i, "hour"), n -= r + 5), dialRef.$.canvas.update(), this.start = Date.now(), this.cancel = enyo.requestAnimationFrame(enyo.bind(this, "loop"));
