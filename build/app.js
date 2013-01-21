@@ -3856,7 +3856,7 @@ item: "item1",
 components: [ {
 name: "item1",
 classes: "panels-sample-sliding-item",
-style: "margin-left:20px;font-size:36px;"
+style: "margin-left:20px;font-size:26px;"
 } ]
 } ]
 } ]
@@ -4073,7 +4073,7 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "36pt Arial"
+font: "24pt Arial"
 }, {
 name: "splitText",
 kind: "enyo.canvas.Text",
@@ -4082,7 +4082,7 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "36pt Arial"
+font: "24pt Arial"
 } ]
 } ],
 published: {
