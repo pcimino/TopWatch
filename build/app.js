@@ -4073,7 +4073,7 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "24pt Arial"
+font: "18pt Arial"
 }, {
 name: "splitText",
 kind: "enyo.canvas.Text",
@@ -4082,7 +4082,7 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "24pt Arial"
+font: "18pt Arial"
 } ]
 } ],
 published: {
