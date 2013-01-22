@@ -4118,7 +4118,7 @@ TimeDelay.monitorFlag();
 setupCanvasSize: function() {
 dialRef.$.timerLayer.destroyClientControls(), dialRef.$.watchFace.destroyClientControls(), dialRef.g_width = getWidth(), dialRef.g_height = getHeight(), dialRef.$.canvas.setAttribute("width", dialRef.g_width), dialRef.$.canvas.setAttribute("height", dialRef.g_height), dialRef.g_width = getWidth(), dialRef.g_height = getHeight();
 var e = dialRef.g_width;
-dialRef.g_height < e && (e = dialRef.g_height - heightMargin), e = .4 * e, dialRef.drawDial(dialRef.milliColor, dialRef.secColor, dialRef.minColor, dialRef.hourColor, dialRef.centerColor, e);
+dialRef.g_height < e && (e = dialRef.g_height - heightMargin), e = .4 * e / 1.5, dialRef.drawDial(dialRef.milliColor, dialRef.secColor, dialRef.minColor, dialRef.hourColor, dialRef.centerColor, e);
 },
 handleRotateCanvas: function(e) {
 var t = !1, n = 0;
@@ -4202,7 +4202,7 @@ return;
 }
 dialRef.g_timeStr = dialRef.timeString(), dialRef.displayTime(), dialRef.firstTime = !1, this.frame++;
 var e = dialRef.g_width / 2, t = -20 + (dialRef.g_height - heightMargin) / 2, n = dialRef.g_width;
-dialRef.g_height < n && (n = dialRef.g_height - heightMargin), n = .4 * n;
+dialRef.g_height < n && (n = dialRef.g_height - heightMargin), n = .4 * n / 1.5;
 var r = n / 5, i = 0, s = !1;
 s || (this.$.timerLayer.destroyClientControls(), i = 360 * dialRef.milliSec / 1e3 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.milliColor, i, "milli"), n -= r + 5, i = 360 * dialRef.second / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.secColor, i, "second"), n -= r + 5, i = 360 * dialRef.minute / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.minColor, i, "minute"), n -= r + 5, i = 360 * dialRef.hour / 12 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.hourColor, i, "hour"), n -= r + 5), dialRef.$.canvas.update(), this.start = Date.now(), this.cancel = enyo.requestAnimationFrame(enyo.bind(this, "loop"));
 },
