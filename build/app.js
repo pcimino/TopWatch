@@ -3821,10 +3821,15 @@ noStretch: "true",
 ontap: "closePanel"
 }, {
 content: "Splits"
+}, {
+kind: "onyx.IconButton",
+src: "img/QuestionMark.png",
+ontap: "openPopup",
+popup: "popupHelp",
+style: "margin-left: 150px;"
 } ]
 }, {
-kind: "TopWatchDial",
-style: "margin-top:55px;"
+kind: "TopWatchDial"
 } ]
 }, {
 name: "rightPanel",
@@ -3842,6 +3847,12 @@ noStretch: "true",
 ontap: "openPanel"
 }, {
 content: "Timer"
+}, {
+kind: "onyx.IconButton",
+src: "img/QuestionMark.png",
+ontap: "openPopup",
+popup: "popupHelp",
+style: "margin-left: 145px;"
 } ]
 }, {
 kind: "List",
@@ -3856,7 +3867,7 @@ item: "item1",
 components: [ {
 name: "item1",
 classes: "panels-sample-sliding-item",
-style: "margin-left:20px;font-size:36px;"
+style: "margin-left:20px;font-size:26px;"
 } ]
 } ]
 } ]
@@ -3868,26 +3879,15 @@ classes: "onyx",
 style: "height: 50px;",
 components: [ {
 kind: "onyx.Button",
+name: "startSplitButton",
 content: "Start",
-ontap: "startTimer"
+ontap: "startSplitTimer"
 }, {
 kind: "onyx.Button",
-content: "Split",
-ontap: "splitTimer"
-}, {
-kind: "onyx.Button",
-content: "Stop",
-ontap: "stopTimer"
-}, {
-kind: "onyx.Button",
-content: "Clear Splits",
-ontap: "clearSplits"
-}, {
-kind: "onyx.IconButton",
-src: "img/QuestionMark.png",
-ontap: "openPopup",
-popup: "popupHelp",
-style: "margin-left: 20px;"
+name: "stopResetButton",
+content: "Reset",
+ontap: "stopReset",
+style: "margin-left: 145px;"
 } ]
 }, {
 kind: "PopupDialog",
@@ -3928,11 +3928,8 @@ value: "Splits"
 rendered: function() {
 this.inherited(arguments), topWatchRef = this;
 },
-startTimer: function() {
-dialRef.startTimer();
-},
-splitTimer: function() {
-dialRef.splitTimer();
+startSplitTimer: function() {
+dialRef.timerRunning === !1 ? (dialRef.startTimer(), this.$.startSplitButton.setContent("Split"), this.$.stopResetButton.setContent("Stop")) : dialRef.splitTimer();
 },
 addSplit: function(e) {
 topWatchRef.splitTimeData.push(e), topWatchRef.$.splitList.reset();
@@ -3940,17 +3937,11 @@ topWatchRef.splitTimeData.push(e), topWatchRef.$.splitList.reset();
 getNextId: function() {
 return topWatchRef.padStr(topWatchRef.splitTimeData.length, " ", 4);
 },
-stopTimer: function() {
-dialRef.stopTimer();
-},
-resetTimer: function() {
-dialRef.resetTimer(), topWatchRef.clearSplits(), dialRef.resetTimer(), dialRef.$.timerLayer.destroyClientControls();
-},
-clearSplits: function() {
-topWatchRef.splitTimeData = [ {
+stopReset: function() {
+dialRef.timerRunning === !1 ? (dialRef.$.timerLayer.destroyClientControls(), dialRef.resetTimer(), topWatchRef.splitTimeData = [ {
 id: "",
 value: "Splits"
-} ], topWatchRef.$.splitList.reset(), topWatchRef.$.splitList.reset();
+} ], topWatchRef.$.splitList.reset(), topWatchRef.$.splitList.reset(), dialRef.$.canvas.update()) : (dialRef.stopTimer(), this.$.startSplitButton.setContent("Start"), this.$.stopResetButton.setContent("Reset"));
 },
 closePanel: function() {
 var e = this.$.slidingPane.setIndex(1);
@@ -3959,7 +3950,7 @@ openPanel: function() {
 var e = this.$.slidingPane.setIndex(0);
 },
 displayTime: function(e) {
-topWatchRef.splitTimeData[0].value = "Splits List. Current Timer:" + e, topWatchRef.$.splitList.reset();
+topWatchRef.splitTimeData[0].value = "Time: " + e, topWatchRef.$.splitList.reset();
 },
 setupItem: function(e, t) {
 e.count = this.splitTimeData.length;
@@ -4048,7 +4039,7 @@ this.hide();
 var TimeDelay = {
 defaultDelay: 5,
 runFlag: !1
-}, heightMargin = 250;
+}, heightMargin = 250, circleScale = .4;
 
 enyo.kind({
 name: "TopWatchDial",
@@ -4057,7 +4048,7 @@ components: [ {
 kind: "enyo.Canvas",
 attributes: {
 width: 280,
-height: 300
+height: 350
 },
 components: [ {
 name: "watchFace",
@@ -4073,7 +4064,7 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "36pt Arial"
+font: "20pt Arial"
 }, {
 name: "splitText",
 kind: "enyo.canvas.Text",
@@ -4082,13 +4073,13 @@ l: 0,
 t: 0
 },
 color: "black",
-font: "36pt Arial"
+font: "20pt Arial"
 } ]
 } ],
 published: {
 g_beta: 0,
 g_width: 280,
-g_height: 300,
+g_height: 350,
 hour: 0,
 minute: 0,
 second: 0,
@@ -4098,11 +4089,11 @@ timerRunning: !1,
 firstTime: !0,
 g_change: 4,
 g_timeStr: "00:00:00.000",
-milliColor: "DE1D43",
-secColor: "34308B",
-minColor: "2DAA4A",
-hourColor: "201C5A",
-centerColor: "86D0F4"
+milliColor: "#DE1D43",
+secColor: "#34308B",
+minColor: "#2DAA4A",
+hourColor: "#201C5A",
+centerColor: "#86D0F4"
 },
 setupAnimation: function() {
 this.cancel && enyo.cancelRequestAnimationFrame(this.cancel), this.loopStart = Date.now(), this.frame = 0, this.start = Date.now(), enyo.asyncMethod(this, "loop");
@@ -4118,7 +4109,7 @@ TimeDelay.monitorFlag();
 setupCanvasSize: function() {
 dialRef.$.timerLayer.destroyClientControls(), dialRef.$.watchFace.destroyClientControls(), dialRef.g_width = getWidth(), dialRef.g_height = getHeight(), dialRef.$.canvas.setAttribute("width", dialRef.g_width), dialRef.$.canvas.setAttribute("height", dialRef.g_height), dialRef.g_width = getWidth(), dialRef.g_height = getHeight();
 var e = dialRef.g_width;
-dialRef.g_height < e && (e = dialRef.g_height - heightMargin), e = .4 * e / 1.5, dialRef.drawDial(dialRef.milliColor, dialRef.secColor, dialRef.minColor, dialRef.hourColor, dialRef.centerColor, e);
+dialRef.g_height < e && (e = dialRef.g_height - heightMargin), e = circleScale * e, dialRef.drawDial(dialRef.milliColor, dialRef.secColor, dialRef.minColor, dialRef.hourColor, dialRef.centerColor, e);
 },
 handleRotateCanvas: function(e) {
 var t = !1, n = 0;
@@ -4128,13 +4119,13 @@ destroy: function() {
 this.cancel && enyo.cancelRequestAnimationFrame(this.cancel), this.inherited(arguments);
 },
 drawDial: function(e, t, n, r, i, s) {
-var o = dialRef.g_width / 2, u = -20 + (dialRef.g_height - heightMargin) / 2, a = o, f = u;
+var o = dialRef.g_width / 2, u = 25 + (dialRef.g_height - heightMargin) / 2, a = o, f = u;
 dialRef.$.timerText.setBounds({
-l: a - 240,
-t: dialRef.g_height - (heightMargin + 15)
+l: a - 113,
+t: dialRef.g_height - (heightMargin - 70)
 }), dialRef.$.timerText.setText("Elapsed: 00:00:00:000"), dialRef.$.splitText.setBounds({
-l: a - 160,
-t: dialRef.g_height - (heightMargin - 25)
+l: a - 70,
+t: dialRef.g_height - (heightMargin - 105)
 }), dialRef.$.splitText.setText("Split: 00:00:00:000"), dialLabel = "Draw Dial :" + o + ", " + u + ", " + s;
 var l = s / 5;
 dialRef.drawIndicator(o, u, s, l, e, 101, 2, 16), s -= l + 5, dialRef.drawIndicator(o, u, s, l, t, 12, 4, 3), s -= l + 5, dialRef.drawIndicator(o, u, s, l, n, 12, 6, 2), s -= l + 5, dialRef.drawIndicator(o, u, s, l, r, 12, 8, 1), s -= l + 5, dialRef.$.watchFace.createComponent({
@@ -4201,8 +4192,8 @@ this.start = Date.now(), this.cancel = enyo.requestAnimationFrame(enyo.bind(this
 return;
 }
 dialRef.g_timeStr = dialRef.timeString(), dialRef.displayTime(), dialRef.firstTime = !1, this.frame++;
-var e = dialRef.g_width / 2, t = -20 + (dialRef.g_height - heightMargin) / 2, n = dialRef.g_width;
-dialRef.g_height < n && (n = dialRef.g_height - heightMargin), n = .4 * n / 1.5;
+var e = dialRef.g_width / 2, t = 25 + (dialRef.g_height - heightMargin) / 2, n = dialRef.g_width;
+dialRef.g_height < n && (n = dialRef.g_height - heightMargin), n = circleScale * n;
 var r = n / 5, i = 0, s = !1;
 s || (this.$.timerLayer.destroyClientControls(), i = 360 * dialRef.milliSec / 1e3 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.milliColor, i, "milli"), n -= r + 5, i = 360 * dialRef.second / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.secColor, i, "second"), n -= r + 5, i = 360 * dialRef.minute / 60 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.minColor, i, "minute"), n -= r + 5, i = 360 * dialRef.hour / 12 - 90, dialRef.drawTimerHand(e, t, n, r, dialRef.hourColor, i, "hour"), n -= r + 5), dialRef.$.canvas.update(), this.start = Date.now(), this.cancel = enyo.requestAnimationFrame(enyo.bind(this, "loop"));
 },
