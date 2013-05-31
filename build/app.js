@@ -3801,6 +3801,10 @@ name: "TopWatch",
 kind: "FittableRows",
 classes: "app enyo-fit",
 components: [ {
+name: "headerContainer",
+kind: "FittableColumns",
+fit: !0,
+components: [ {
 name: "slidingPane",
 kind: "Panels",
 fit: !0,
@@ -3871,12 +3875,13 @@ style: "margin-left:20px;font-size:26px;"
 } ]
 } ]
 } ]
+} ]
 }, {
-kind: onyx.MoreToolbar,
-name: "ButtonToolbar",
-layoutKind: "FittableRowsLayout",
-classes: "onyx",
+name: "footerContainer",
+kind: "FittableColumns",
+classes: "onyx enyo-center",
 style: "height: 50px;",
+fit: !0,
 components: [ {
 kind: "onyx.Button",
 name: "startSplitButton",
